@@ -14,12 +14,15 @@ declare global {
 }
 const isSuport = ref(false)
 
-function detectSupport() {
-  return window?.ai?.createTextSession
+async function detectSupport() {
+  const ai = window?.ai
+  const assistant = await ai?.assistant
+  const capabilities = await assistant?.capabilities()
+  return capabilities?.available === 'readily'
 }
 
-onMounted(() => {
-  isSuport.value = detectSupport()
+onMounted(async () => {
+  isSuport.value = await detectSupport()
 })
 </script>
 

@@ -25,7 +25,7 @@ const chatList = useStorage('ai_api_text_history', [] as ChatItem[] )
 
 async function sendToLLM(text: string) {
   if (!text) return
-  const session = await window.ai.createTextSession()
+  const session = await window.ai.assistant.create()
   const stream = session.promptStreaming(text)
   chatList.value.unshift({
     content: '',
