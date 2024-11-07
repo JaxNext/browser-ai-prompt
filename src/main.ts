@@ -6,6 +6,8 @@ import ChatRoom from './components/ChatRoom.vue'
 import NotSupportTip from './components/NotSupportTip.vue'
 import AppList from './components/AppList.vue'
 import Prompt from './components/Prompt.vue'
+import { checkPromptUsability } from './prompt'
+
 declare global {
   interface Window {
     ai: any;
@@ -22,19 +24,13 @@ const router = createRouter({
   ],
 })
 
-// const productionPathPrefix = '/chrome-ai-ui/'
 router.beforeEach(async (to, from, next) => {
-  console.log('from', from)
-  // if in production, remove prefix
-  // if (import.meta.env.PROD) {
-  //   to.path = to.path.replace(productionPathPrefix, '/')
-  // }
-
   if (to.path === '/not-support') {
     next()
     return
   }
-  const isSupport = await detectSupport()
+  const checkRes = await checkPromptUsability()
+  const isSupport = checkRes?.available
   
   if (!isSupport) {
     next('/not-support')
@@ -42,12 +38,5 @@ router.beforeEach(async (to, from, next) => {
     next()
   }
 })
-
-async function detectSupport() {
-  const ai = window?.ai
-  const assistant = await ai?.assistant
-  const capabilities = await assistant?.capabilities()
-  return capabilities?.available === 'readily'
-}
 
 createApp(App).use(router).mount('#app')

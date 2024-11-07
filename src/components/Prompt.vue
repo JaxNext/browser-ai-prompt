@@ -13,6 +13,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
+import { promptStreaming, genSession } from '../prompt'
 
 const userPrompt = ref('')
 const answer = ref('')
@@ -26,13 +27,16 @@ async function send() {
   if (!session.value) {
     await createSession()
   }
-  const res = await session.value?.prompt(userPrompt.value)
-  answer.value = res
+  const stream = await promptStreaming(userPrompt.value)
+  answer.value = ''
+  for await (const chunk of stream) {
+    answer.value += chunk
+  }
   countToken()
 }
 
 async function createSession() {
-  session.value = await window.ai.assistant.create({
+  session.value = await genSession({
     initialPrompts: [
       {
         role: 'system',

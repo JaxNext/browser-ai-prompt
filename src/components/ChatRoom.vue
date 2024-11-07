@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useStorage } from '@vueuse/core'
+import { promptStreaming } from '../prompt'
 interface ChatItem {
   content: string
   mine: boolean
@@ -25,8 +26,7 @@ const chatList = useStorage('ai_api_text_history', [] as ChatItem[] )
 
 async function sendToLLM(text: string) {
   if (!text) return
-  const session = await window.ai.assistant.create()
-  const stream = session.promptStreaming(text)
+  const stream = await promptStreaming(text)
   chatList.value.unshift({
     content: '',
     mine: false,
@@ -34,7 +34,6 @@ async function sendToLLM(text: string) {
   for await (const chunk of stream) {
     chatList.value[0].content = chunk
   }
-  session.destroy()
 }
 function send() {
   if (!input.value) return
