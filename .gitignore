@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 chrome-ai-ui
+prompt
 *.local
 
 # Editor directories and files

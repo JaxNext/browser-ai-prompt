@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useStorage } from '@vueuse/core'
-import { promptStreaming } from '../prompt'
+import { promptStreaming } from '@rejax/browser-ai'
 interface ChatItem {
   content: string
   mine: boolean

@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 import { ref } from 'vue'
-import { promptStreaming, genSession } from '../prompt'
+import { promptStreaming, genSession } from '@rejax/browser-ai'
 
 const userPrompt = ref('')
 const answer = ref('')
@@ -22,44 +22,40 @@ const tokenMax = ref(0)
 const tokenUsed = ref(0)
 const tokenLeft = ref(0)
 
+const initialPrompts = [
+  {
+    role: 'system',
+    content: 'You are a animal expert, user will give you a name of animal, you return the sound of the animal. If the name is not an animal, you return "go away". Return less than 3 words.'
+  },
+  {
+    role: 'user',
+    content: 'dog'
+  },
+  {
+    role: 'assistant',
+    content: 'woof',
+  },
+  {
+    role: 'user',
+    content: 'table'
+  },
+  {
+    role: 'assistant',
+    content: 'go away',
+  }
+]
+
 async function send() {
   if (!userPrompt.value) return
   if (!session.value) {
-    await createSession()
+    session.value = await genSession({ initialPrompts })
   }
   const stream = await promptStreaming(userPrompt.value)
   answer.value = ''
   for await (const chunk of stream) {
-    answer.value += chunk
+    answer.value = chunk
   }
   countToken()
-}
-
-async function createSession() {
-  session.value = await genSession({
-    initialPrompts: [
-      {
-        role: 'system',
-        content: 'You are a animal expert, user will give you a name of animal, you return the sound of the animal. If the name is not an animal, you return "go away". Return less than 3 words.'
-      },
-      {
-        role: 'user',
-        content: 'dog'
-      },
-      {
-        role: 'assistant',
-        content: 'woof',
-      },
-      {
-        role: 'user',
-        content: 'table'
-      },
-      {
-        role: 'assistant',
-        content: 'go away',
-      }
-    ],
-  })
 }
 
 async function countToken() {

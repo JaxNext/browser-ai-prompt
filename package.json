@@ -12,6 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rejax/browser-ai": "^0.0.4",
     "@vueuse/core": "^10.10.0",
     "vue": "^3.4.21",
     "vue-router": "^4.4.5"

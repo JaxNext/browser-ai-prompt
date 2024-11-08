@@ -5,7 +5,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   build: {
-    outDir: 'chrome-ai-ui',
+    outDir: 'prompt',
   },
   base: './',
 })

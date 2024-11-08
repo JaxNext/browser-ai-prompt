@@ -6,11 +6,11 @@ import ChatRoom from './components/ChatRoom.vue'
 import NotSupportTip from './components/NotSupportTip.vue'
 import AppList from './components/AppList.vue'
 import Prompt from './components/Prompt.vue'
-import { checkPromptUsability } from './prompt'
+import { checkPromptUsability } from '@rejax/browser-ai';
 
 declare global {
   interface Window {
-    ai: any;
+    ai?: any;
   }
 }
 const router = createRouter({
@@ -24,7 +24,7 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _from, next) => {
   if (to.path === '/not-support') {
     next()
     return
