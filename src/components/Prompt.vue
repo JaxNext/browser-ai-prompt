@@ -53,15 +53,16 @@ async function send() {
   const stream = await promptStreaming(userPrompt.value)
   answer.value = ''
   for await (const chunk of stream) {
-    answer.value = chunk
+    answer.value += chunk
   }
   countToken()
 }
 
 async function countToken() {
-  tokenMax.value = session.value?.maxTokens
-  tokenUsed.value = session.value?.tokensSoFar
-  tokenLeft.value = session.value?.tokensLeft
+  const { inputQuota, inputUsage } = session.value
+  tokenMax.value = inputQuota
+  tokenUsed.value = inputUsage
+  tokenLeft.value = inputQuota - inputUsage
 }
 </script>
 <style scoped>

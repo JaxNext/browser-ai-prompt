@@ -32,7 +32,7 @@ async function sendToLLM(text: string) {
     mine: false,
   })
   for await (const chunk of stream) {
-    chatList.value[0].content = chunk
+    chatList.value[0].content += chunk
   }
 }
 function send() {

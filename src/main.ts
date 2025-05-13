@@ -6,7 +6,7 @@ import ChatRoom from './components/ChatRoom.vue'
 import NotSupportTip from './components/NotSupportTip.vue'
 import AppList from './components/AppList.vue'
 import Prompt from './components/Prompt.vue'
-import { checkPromptUsability } from '@rejax/browser-ai';
+import { checkPromptAvailability } from '@rejax/browser-ai';
 
 declare global {
   interface Window {
@@ -29,8 +29,9 @@ router.beforeEach(async (to, _from, next) => {
     next()
     return
   }
-  const checkRes = await checkPromptUsability()
-  const isSupport = checkRes?.available
+  const { available, message } = await checkPromptAvailability()
+
+  const isSupport = available
   
   if (!isSupport) {
     next('/not-support')
